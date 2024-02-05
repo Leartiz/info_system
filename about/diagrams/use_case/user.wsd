@@ -1,0 +1,17 @@
+@startuml user
+
+!include styles.wsd
+
+' -----------------------------------------------
+
+actor "Пользователь" as user
+
+actor "Администратор" as admin
+actor "Сотрудник" as employee
+actor "Клиент" as client
+
+client -|> user
+employee -|> client
+admin -|> employee
+
+@enduml

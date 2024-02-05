@@ -1,0 +1,21 @@
+@startuml admin
+
+!include styles.wsd
+
+' -----------------------------------------------
+
+actor "Администратор" as admin
+
+usecase "Войти В Систему" as sign_in
+usecase "Добавить Пользователя" as add_user
+
+left to right direction
+
+admin -u-> sign_in
+admin -u-> add_user
+admin -u-> (Удалить Пользователя)
+admin --> (Просмотр Списка\nПользователей)
+admin --> (Поиск Пользователя)
+admin --> (Сортировать Пользователей\nПо Признаку)
+
+@enduml

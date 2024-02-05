@@ -1,0 +1,36 @@
+@startuml sign_in
+
+!include styles.wsd
+
+' -----------------------------------------------
+
+actor "Пользователь" as user
+boundary "Окно Для Входа" as entry_window
+
+boundary "Окно Ошибки" as err_window #red
+boundary "Главное окно" as main_window
+
+entity "Файловое\nХранилище" as file_storage
+
+control "   Валидировать\nданные для входа" as process_answer
+control "Отобразить\nокно ошибки" as display_err_window
+control " Отобразить\nглавное окно\n  для роли" as display_main_window
+
+' -----------------------------------------------
+
+user -- entry_window 
+user -- main_window
+user -- err_window
+
+' -----------------------------------------------
+
+entry_window --> process_answer : Вводит логин и пароль\nНажимает кнопку ''Войти''
+
+process_answer --> file_storage
+process_answer --> display_main_window : Успех
+process_answer --> display_err_window : Некорректные\nданные
+
+display_err_window --> err_window
+display_main_window --> main_window
+
+@enduml

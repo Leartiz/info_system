@@ -1,0 +1,20 @@
+@startuml client
+
+!include styles.wsd
+
+' -----------------------------------------------
+
+actor "Клиент" as client
+
+left to right direction
+
+client -r-> (Регистрация)
+client -r-> (Войти В Систему)
+client -u-> (Просмотр Списка\nТоваров)
+client -u-> (Поиск Товара)
+client -u-> (Сортировать Товары)
+client --> (Добавить Товар\nВ Корзину)
+client --> (Совершить Покупку)
+client --> (Просмотр Истории Покупок)
+
+@enduml
