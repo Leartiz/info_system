@@ -28,3 +28,7 @@ include(app_code.pri)
 
 HEADERS += \
     entrywindow.h
+
+RESOURCES += \
+    resc.qrc \
+    resources.qrc
