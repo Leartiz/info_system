@@ -4,7 +4,7 @@
 
 ' -----------------------------------------------
 
-actor "Пользователь" as user
+actor "Пользователь" as user #Gray
 
 actor "Администратор" as admin
 actor "Сотрудник" as employee

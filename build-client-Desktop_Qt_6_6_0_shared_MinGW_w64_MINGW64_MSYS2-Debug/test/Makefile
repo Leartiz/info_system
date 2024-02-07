@@ -339,6 +339,7 @@ Makefile: ../../client/test/test.pro C:/msys64/mingw64/share/qt6/mkspecs/win32-g
 		C:/msys64/mingw64/share/qt6/mkspecs/features/toolchain.prf \
 		C:/msys64/mingw64/share/qt6/mkspecs/features/default_pre.prf \
 		C:/msys64/mingw64/share/qt6/mkspecs/features/win32/default_pre.prf \
+		../../client/app/app_code.pri \
 		C:/msys64/mingw64/share/qt6/mkspecs/features/resolve_config.prf \
 		C:/msys64/mingw64/share/qt6/mkspecs/features/exclusive_builds_post.prf \
 		C:/msys64/mingw64/share/qt6/mkspecs/features/default_post.prf \
@@ -632,6 +633,7 @@ C:/msys64/mingw64/share/qt6/mkspecs/features/exclusive_builds.prf:
 C:/msys64/mingw64/share/qt6/mkspecs/features/toolchain.prf:
 C:/msys64/mingw64/share/qt6/mkspecs/features/default_pre.prf:
 C:/msys64/mingw64/share/qt6/mkspecs/features/win32/default_pre.prf:
+../../client/app/app_code.pri:
 C:/msys64/mingw64/share/qt6/mkspecs/features/resolve_config.prf:
 C:/msys64/mingw64/share/qt6/mkspecs/features/exclusive_builds_post.prf:
 C:/msys64/mingw64/share/qt6/mkspecs/features/default_post.prf:

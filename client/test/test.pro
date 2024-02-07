@@ -7,6 +7,9 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  tst_general.cpp
+HEADERS += tst_general.h
 
-HEADERS += \
-    tst_general.h
+message($$PWD) # <--- app
+message($$PWD/../app)
+
+include($$PWD/../app/app_code.pri)
