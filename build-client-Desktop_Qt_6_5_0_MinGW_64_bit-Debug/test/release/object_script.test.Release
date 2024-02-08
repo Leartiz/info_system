@@ -1,0 +1,13 @@
+release/tst_general.o
+release/csvstorage.o
+release/storage.o
+release/storagefactory.o
+release/product.o
+release/role.o
+release/user.o
+release/regexuservalidator.o
+release/mainwindow.o
+release/entrywindow.o
+release/moc_tst_general.o
+release/moc_mainwindow.o
+release/moc_entrywindow.o

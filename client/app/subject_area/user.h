@@ -19,25 +19,28 @@ public:
         Role role, const QString& fullName, const QString& passport,
         UserValidatorSp validator
         );
-
-    static User createFromCsv(const QString& csvLine,
-                              UserValidatorSp validator);
-    QString toCsv() const;
+    QString toString() const;
 
 public:
     void setValidator(UserValidatorSp validator);
 
     QString getUsername() const;
-    QDateTime getSignUpDateTime() const;
+    QString getPassword() const;
+    Role getRole() const;
 
+    QDateTime getSignUpDateTime() const;
     QString getFullName() const;
     QString getPassport() const;
 
-    Role getRole() const;
+    std::optional<int> getId() const;
     bool hasId() const;
 
+public:
+    void setUsername(const QString& value);
+    void setPassword(const QString& value);
+
 private:
-    User();
+    explicit User(Role role = Role::Client);
     UserValidatorSp validator;
 
 private:

@@ -3,7 +3,7 @@
 
 #include <QString>
 
-enum class Role {
+enum class Role : int {
     Client,
     Worker,
     Admin

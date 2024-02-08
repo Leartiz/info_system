@@ -8,21 +8,21 @@ const QRegularExpression& RegexUserValidator::usernameRegex() {
 
 const QRegularExpression& RegexUserValidator::passwordRegex()
 {
-    static const QRegularExpression re{ R"(^.{5,25}$)" };
+    static const QRegularExpression re{ R"(^[\S]{5,25}$)" };
     Q_ASSERT(re.isValid());
     return re;
 };
 
 const QRegularExpression& RegexUserValidator::fullNameRegex()
 {
-    static const QRegularExpression re{ R"(^.{5,25}$)" };
+    static const QRegularExpression re{ R"(^[А-Я]{1}[а-я]{1,25}\s[А-Я]{1}[а-я]{1,25}\s[А-Я]{1}[а-я]{1,25}$)" };
     Q_ASSERT(re.isValid());
     return re;
 }
 
 const QRegularExpression& RegexUserValidator::passportRegex()
 {
-    static const QRegularExpression re{ R"(^.{5,25}$)" };
+    static const QRegularExpression re{ R"(^\d{4}\s\d{6}$)" };
     Q_ASSERT(re.isValid());
     return re;
 }

@@ -1,7 +1,12 @@
+#include <QJsonDocument>
+#include <QJsonObject>
+
 #include <stdexcept>
 #include <utility>
 
 #include "user.h"
+
+User::User(Role role): role(role) {}
 
 User User::create(
     std::optional<int> id,
@@ -31,13 +36,12 @@ User User::create(
 
     // ***
 
-    User user;
+    User user(role);
     user.validator = std::move(validator);
 
     user.id = id; // nil?
     user.username = username;
     user.password = password;
-    user.role = role;
 
     user.signUpDateTime = QDateTime::currentDateTimeUtc();
     user.fullName = fullName;
@@ -45,17 +49,15 @@ User User::create(
     return user;
 }
 
-User User::createFromCsv(const QString& csvLine,
-                         std::shared_ptr<UserValidator> validator)
+QString User::toString() const
 {
-    // TODO:
-
-    return User{};
-}
-
-QString User::toCsv() const
-{
-    return "";
+    return QJsonDocument{
+        QJsonObject{
+            { "id", id.value_or(-1) },
+            { "username", username },
+            { "password", password },
+        }
+    }.toJson();
 }
 
 // -----------------------------------------------------------------------
@@ -69,17 +71,35 @@ void User::setValidator(std::shared_ptr<UserValidator> validator)
     this->validator = std::move(validator);
 }
 
-QString User::getUsername() const
+// getters
+// -----------------------------------------------------------------------
+
+std::optional<int> User::getId() const { return id; }
+bool User::hasId() const { return id.has_value(); }
+
+QString User::getUsername() const { return username; }
+QString User::getPassword() const { return password; }
+Role User::getRole() const { return role; }
+
+QDateTime User::getSignUpDateTime() const { return signUpDateTime; }
+QString User::getFullName() const { return fullName; }
+QString User::getPassport() const { return passport; }
+
+// setters
+// -----------------------------------------------------------------------
+
+void User::setUsername(const QString& value)
 {
-    return username;
+    if (!validator->isValidUsername(value)) {
+        throw std::runtime_error("Username is invalid");
+    }
+    username = value;
 }
 
-Role User::getRole() const
+void User::setPassword(const QString& value)
 {
-    return role;
-}
-
-bool User::hasId() const
-{
-    return id.has_value();
+    if (!validator->isValidPassword(value)) {
+        throw std::runtime_error("Password is invalid");
+    }
+    password = value;
 }
