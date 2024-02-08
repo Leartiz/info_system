@@ -8,32 +8,37 @@
 #include <QRegularExpression>
 
 #include "role.h"
+#include "validators/uservalidator.h"
 
 class User final
 {
 public:
-    struct Validator
-    {
-        static QRegularExpression username;
-        static QRegularExpression password;
-        static QRegularExpression fullName;
-        static QRegularExpression passport;
-        static bool isValid();
-    };
-
-public:
-    static User createWithoutChecks(
+    static User create(
+        std::optional<int> id,
         const QString& username, const QString& password,
-        Role role, const QString& fullName, const QString& passport
+        Role role, const QString& fullName, const QString& passport,
+        UserValidatorSp validator
         );
 
-    static User createFromCsv(const QString& value);
+    static User createFromCsv(const QString& csvLine,
+                              UserValidatorSp validator);
     QString toCsv() const;
 
-    bool withId() const;
+public:
+    void setValidator(UserValidatorSp validator);
+
+    QString getUsername() const;
+    QDateTime getSignUpDateTime() const;
+
+    QString getFullName() const;
+    QString getPassport() const;
+
+    Role getRole() const;
+    bool hasId() const;
 
 private:
     User();
+    UserValidatorSp validator;
 
 private:
     std::optional<int> id;
