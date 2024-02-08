@@ -12,6 +12,7 @@ debug/role.o
 debug/user.o
 debug/regexuservalidator.o
 debug/storageerror.o
+debug/uservalidatorfactory.o
 debug/qrc_resources.o
 debug/moc_adminwindow.o
 debug/moc_clientwindow.o

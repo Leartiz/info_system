@@ -56,6 +56,11 @@ QString User::toString() const
             { "id", id.value_or(-1) },
             { "username", username },
             { "password", password },
+            { "role", roleToString(role) },
+
+            { "signUpDateTime", signUpDateTime.toString() },
+            { "fullName", fullName },
+            { "passport", passport }
         }
     }.toJson();
 }

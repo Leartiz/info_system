@@ -5,7 +5,7 @@
 #include <QList>
 #include <QStringList>
 
-#include "subject_area/validators/trueuservalidator.h"
+#include "subject_area/validators/uservalidatorfactory.h"
 
 #include "csvstorage.h"
 #include "storageerror.h"
@@ -113,17 +113,31 @@ User CsvStorage::getUserByLogin(const QString& value)
 {
     using namespace StorageError;
     const auto fn = wholeFn(fileNameForUsers);
-    QFile f(fn);
-    if (!f.open(QFile::ReadOnly)) {
-        throw Critical("Open file for users failed");
-    }
 
-    UserValidatorSp validator = std::make_shared<TrueUserValidator>();
+    QFile f(fn);
+    if (!f.open(QFile::ReadOnly))
+        throw Critical("Open file for users failed");
+
+    // ***
+
+    const auto trueValidator = UserValidatorFactory::get(ValidatorType::True);
+    const auto regexValidator = UserValidatorFactory::get(ValidatorType::Regex);
+
     while (!f.atEnd()) {
         const QString line{ f.readLine() };
         const auto parts = line.split(";");
+
         if (parts[1] == value) {
-            return User::create(0, parts[1], parts[2], Role::Admin, "", "", validator);
+            auto user = User::create(
+                parts[0].toInt(),
+                parts[1], parts[2],
+                strToRole(parts[3]),
+                parts[4], parts[5],
+                trueValidator
+                );
+
+            user.setValidator(regexValidator);
+            return user;
         }
     }
 
