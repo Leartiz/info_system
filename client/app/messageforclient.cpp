@@ -15,4 +15,9 @@ QString Critical::unexpectedError()
     return QObject::tr("Неожиданная ошибка");
 }
 
+QString withArg(const QString& text, const QString& arg)
+{
+    return text + ": " + arg;
+}
+
 } // namespace MessageForClient

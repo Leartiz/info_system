@@ -8,9 +8,9 @@ actor "Пользователь" as user
 boundary "Окно Для Входа" as entry_window
 
 boundary "Окно Ошибки" as err_window #red
-boundary "Главное окно" as main_window
+boundary "Главное Окно\nДля Роли" as main_window
 
-entity "Файловое Хранилище" as file_storage
+entity "Файловое\nХранилище" as file_storage
 
 ' -----------------------------------------------
 

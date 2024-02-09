@@ -23,6 +23,10 @@ public slots:
 signals:
     void successful(const User&);
 
+    // QWidget interface
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     Ui::EntryWindow *ui;
     Storage& storage;

@@ -1,5 +1,35 @@
 @startuml add_user
 
+!include ../styles.wsd
 
+actor "Администратор" as admin
+
+boundary "  Главное Окно\nАдминистратора" as admin_window
+boundary "Окно Добавления\n   Пользователя" as add_user_window
+boundary "Окно Ошибки" as err_window #red
+
+entity "Файловое\nХранилище" as file_storage
+
+control "   Отобразить\nОкно Добавления\n  Пользователя" as display_add_user_window
+control "Отобразить\nОкно Ошибки" as display_err_window #red
+control "Валидировать\nДанные Пользователя" as process_user_data
+control "Добаить\nНового Пользователя" as add_new_user
+
+' -----------------------------------------------
+
+admin -- admin_window
+admin -- add_user_window
+admin -- err_window
+
+' -----------------------------------------------
+
+admin_window --> display_add_user_window : Нажимает кнопку\n''Плюс''
+display_add_user_window -l-> add_user_window
+add_user_window --> process_user_data : Заполняет форму\nНажимает кнопку ''Добавить''
+process_user_data --> file_storage
+process_user_data --> add_new_user : Успех
+process_user_data --> display_err_window : Некорректные\nданные
+display_err_window -l-> err_window
+add_new_user --> file_storage
 
 @enduml

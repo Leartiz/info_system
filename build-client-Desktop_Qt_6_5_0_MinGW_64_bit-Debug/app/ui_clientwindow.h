@@ -11,28 +11,44 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDialog>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_ClientWindow
 {
 public:
+    QWidget *centralwidget;
+    QMenuBar *menubar;
+    QStatusBar *statusbar;
 
-    void setupUi(QDialog *ClientWindow)
+    void setupUi(QMainWindow *ClientWindow)
     {
         if (ClientWindow->objectName().isEmpty())
             ClientWindow->setObjectName("ClientWindow");
-        ClientWindow->resize(400, 300);
+        ClientWindow->resize(800, 600);
+        centralwidget = new QWidget(ClientWindow);
+        centralwidget->setObjectName("centralwidget");
+        ClientWindow->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(ClientWindow);
+        menubar->setObjectName("menubar");
+        menubar->setGeometry(QRect(0, 0, 800, 21));
+        ClientWindow->setMenuBar(menubar);
+        statusbar = new QStatusBar(ClientWindow);
+        statusbar->setObjectName("statusbar");
+        ClientWindow->setStatusBar(statusbar);
 
         retranslateUi(ClientWindow);
 
         QMetaObject::connectSlotsByName(ClientWindow);
     } // setupUi
 
-    void retranslateUi(QDialog *ClientWindow)
+    void retranslateUi(QMainWindow *ClientWindow)
     {
-        ClientWindow->setWindowTitle(QCoreApplication::translate("ClientWindow", "Dialog", nullptr));
+        ClientWindow->setWindowTitle(QCoreApplication::translate("ClientWindow", "MainWindow", nullptr));
     } // retranslateUi
 
 };

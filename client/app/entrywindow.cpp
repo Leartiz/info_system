@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QValidator>
+#include <QCloseEvent>
 
 #include "messageforclient.h"
 #include "entrywindow.h"
@@ -32,13 +33,19 @@ EntryWindow::EntryWindow(QWidget *parent) :
     // ui
     {
         connect(ui->pushBtnSignIn, &QPushButton::clicked,
-                this, &EntryWindow::onClicked_pushBtnSignIn);
+                this, &EntryWindow::onClicked_pushBtnSignIn);        
     }
 }
 
 EntryWindow::~EntryWindow()
 {
     delete ui;
+}
+
+void EntryWindow::closeEvent(QCloseEvent *event)
+{
+    event->accept();
+    qApp->quit();
 }
 
 // -----------------------------------------------------------------------
@@ -65,10 +72,10 @@ void EntryWindow::onClicked_pushBtnSignIn()
         return;
     } catch(const std::runtime_error& err) {
         qCritical() << err.what();
-        QMessageBox::warning(
+        QMessageBox::critical(
             this, windowTitle(),
-            Critical::unexpectedError() +
-                " : " + err.what()
+            MessageForClient::withArg(
+                Critical::unexpectedError(), err.what())
             );
 
         qApp->quit();

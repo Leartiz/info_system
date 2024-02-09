@@ -41,15 +41,17 @@ static constexpr auto qt_meta_stringdata_CLASSEntryWindowENDCLASS = QtMocHelpers
     "EntryWindow",
     "successful",
     "",
+    "User",
     "onClicked_pushBtnSignIn"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSEntryWindowENDCLASS_t {
-    uint offsetsAndSizes[8];
+    uint offsetsAndSizes[10];
     char stringdata0[12];
     char stringdata1[11];
     char stringdata2[1];
-    char stringdata3[24];
+    char stringdata3[5];
+    char stringdata4[24];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSEntryWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -58,11 +60,13 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSEntryWindowENDCLASS_t qt_meta_s
         QT_MOC_LITERAL(0, 11),  // "EntryWindow"
         QT_MOC_LITERAL(12, 10),  // "successful"
         QT_MOC_LITERAL(23, 0),  // ""
-        QT_MOC_LITERAL(24, 23)   // "onClicked_pushBtnSignIn"
+        QT_MOC_LITERAL(24, 4),  // "User"
+        QT_MOC_LITERAL(29, 23)   // "onClicked_pushBtnSignIn"
     },
     "EntryWindow",
     "successful",
     "",
+    "User",
     "onClicked_pushBtnSignIn"
 };
 #undef QT_MOC_LITERAL
@@ -83,13 +87,13 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSEntryWindowENDCLASS[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   26,    2, 0x06,    1 /* Public */,
+       1,    1,   26,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   27,    2, 0x0a,    2 /* Public */,
+       4,    0,   29,    2, 0x0a,    3 /* Public */,
 
  // signals: parameters
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 3,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -108,6 +112,7 @@ Q_CONSTINIT const QMetaObject EntryWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<EntryWindow, std::true_type>,
         // method 'successful'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const User &, std::false_type>,
         // method 'onClicked_pushBtnSignIn'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
@@ -120,21 +125,20 @@ void EntryWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         auto *_t = static_cast<EntryWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->successful(); break;
+        case 0: _t->successful((*reinterpret_cast< std::add_pointer_t<User>>(_a[1]))); break;
         case 1: _t->onClicked_pushBtnSignIn(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (EntryWindow::*)();
+            using _t = void (EntryWindow::*)(const User & );
             if (_t _q_method = &EntryWindow::successful; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
             }
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *EntryWindow::metaObject() const
@@ -168,8 +172,9 @@ int EntryWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void EntryWindow::successful()
+void EntryWindow::successful(const User & _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_WARNING_POP

@@ -13,7 +13,7 @@ boundary "Главное окно" as main_window
 entity "Файловое\nХранилище" as file_storage
 
 control "   Валидировать\nданные для входа" as process_answer
-control "Отобразить\nокно ошибки" as display_err_window
+control "Отобразить\nокно ошибки" as display_err_window #red
 control " Отобразить\nглавное окно\n  для роли" as display_main_window
 
 ' -----------------------------------------------

@@ -7,24 +7,10 @@
 
 WindowNavigator::WindowNavigator()
     : entryWindow(new EntryWindow)
-    , adminWindow(nullptr)
-    , workerWindow(nullptr)
-    , clientWindow(nullptr)
+    , windowForRole(nullptr)
 {
-    {
-        connect(entryWindow, &EntryWindow::successful,
-                this, &WindowNavigator::onSuccessful_entryWindow);
-    }
-
+    connectToEntry();
     entryWindow->show();
-}
-
-WindowNavigator::~WindowNavigator()
-{
-    delete entryWindow;
-    delete adminWindow;
-    delete workerWindow;
-    delete clientWindow;
 }
 
 // -----------------------------------------------------------------------
@@ -33,25 +19,73 @@ void WindowNavigator::onSuccessful_entryWindow(
     const User& user)
 {
     qInfo() << user.toJsonString();
-    entryWindow->hide();
-
-    entryWindow->deleteLater();
-    entryWindow = nullptr;
+    hideAndRemoveEntry();
 
     // ***
 
     switch (user.getRole()) {
     case Role::Client:
-        clientWindow = new ClientWindow;
-        clientWindow->show();
+        {
+            auto window = new ClientWindow;
+            {
+
+            }
+            windowForRole.reset(window);
+        }
         break;
     case Role::Worker:
-        workerWindow = new WorkerWindow;
-        workerWindow->show();
+        {
+            auto window = new WorkerWindow;
+            {
+                connect(window, &WorkerWindow::logout,
+                        this, &WindowNavigator::onLogout_windowForRole);
+            }
+            windowForRole.reset(window);
+        }
         break;
     case Role::Admin:
-        adminWindow = new AdminWindow;
-        adminWindow->show();
+        {
+            auto window = new AdminWindow;
+            {
+
+            }
+            windowForRole.reset(window);
+        }
         break;
+    default:
+        Q_ASSERT(false);
     }
+
+    windowForRole->show();
+}
+
+void WindowNavigator::onLogout_windowForRole()
+{
+    hideAndRemoveForRole();
+
+    entryWindow.reset(new EntryWindow);
+    connectToEntry();
+    entryWindow->show();
+}
+
+// -----------------------------------------------------------------------
+
+void WindowNavigator::connectToEntry()
+{
+    {
+        connect(entryWindow.get(), &EntryWindow::successful,
+                this, &WindowNavigator::onSuccessful_entryWindow);
+    }
+}
+
+void WindowNavigator::hideAndRemoveEntry()
+{
+    entryWindow->hide();
+    entryWindow.reset();
+}
+
+void WindowNavigator::hideAndRemoveForRole()
+{
+    windowForRole->hide();
+    windowForRole.reset();
 }

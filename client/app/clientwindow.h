@@ -1,13 +1,13 @@
 #ifndef CLIENTWINDOW_H
 #define CLIENTWINDOW_H
 
-#include <QDialog>
+#include <QMainWindow>
 
 namespace Ui {
 class ClientWindow;
 }
 
-class ClientWindow : public QDialog
+class ClientWindow : public QMainWindow
 {
     Q_OBJECT
 

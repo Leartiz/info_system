@@ -1,13 +1,14 @@
 #ifndef WINDOWNAVIGATOR_H
 #define WINDOWNAVIGATOR_H
 
+#include <memory>
+
 #include <QObject>
+#include <QMainWindow>
+
+#include "entrywindow.h"
 
 class EntryWindow;
-class AdminWindow;
-class ClientWindow;
-class WorkerWindow;
-
 class User;
 
 class WindowNavigator : public QObject
@@ -16,19 +17,19 @@ class WindowNavigator : public QObject
 
 public:
     WindowNavigator();
-    ~WindowNavigator();
 
 public slots:
     void onSuccessful_entryWindow(const User& user);
+    void onLogout_windowForRole();
 
 private:
-    EntryWindow* entryWindow;
+    std::unique_ptr<EntryWindow> entryWindow;
+    void hideAndRemoveEntry();
+    void connectToEntry();
 
-    AdminWindow* adminWindow;
-    WorkerWindow* workerWindow;
-    ClientWindow* clientWindow;
-
-
+private:
+    std::unique_ptr<QMainWindow> windowForRole;
+    void hideAndRemoveForRole();
 };
 
 #endif // WINDOWNAVIGATOR_H
