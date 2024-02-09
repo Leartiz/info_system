@@ -29,6 +29,7 @@ SOURCES += \
     entrywindow.cpp \
     mainwindow.cpp \
     main.cpp \
+    windownavigator.cpp \
     workerwindow.cpp
 
 HEADERS += \
@@ -36,6 +37,7 @@ HEADERS += \
     clientwindow.h \
     entrywindow.h \
     mainwindow.h \
+    windownavigator.h \
     workerwindow.h
 
 include(app_code.pri)

@@ -10,7 +10,51 @@
 #include "csvstorage.h"
 #include "storageerror.h"
 
+using StorageError::NotFound;
+using StorageError::Unexpected;
+using StorageError::Initialization;
+
+namespace
+{
+
+QStringList readStrs(QFile& f)
+{
+    const QString line{ f.readLine() };
+    return line.split(CsvStorage::sep);
+}
+
+User userFromStrs(const QStringList& strs)
+{
+    bool converted = false;
+    const auto id = strs[0].toInt(&converted);
+    if (!converted) {
+        throw Unexpected("Failed to convert ID");
+    }
+    const auto roleNumber = strs[3].toInt(&converted);
+    if (!converted) {
+        throw Unexpected("Failed to convert role");
+    }
+
+    // ***
+
+    auto user = User::create(
+        UserValidatorFactory::trueInstance,
+        strs[1], strs[2], makeRole(roleNumber), strs[5], strs[6],
+        id, QDateTime::fromString(strs[4], Qt::ISODate)
+    );
+    user.setValidator(
+        UserValidatorFactory::regexInstance);
+
+    return user;
+}
+
+} // namespace
+
+// -----------------------------------------------------------------------
+
+const QString CsvStorage::sep = ";";
 const QString CsvStorage::rootDir{ "csv_storage" };
+
 const QString CsvStorage::fileNameForUsers{ "users.csv" };
 const QString CsvStorage::fileNameForProducts{ "products.csv" };
 const QString CsvStorage::fileNameForPurchases{ "purchases.csv" };
@@ -21,6 +65,7 @@ QString CsvStorage::wholeFn(const QString& fn)
     return rootDir + "/" + fn;
 }
 
+// ctor
 // -----------------------------------------------------------------------
 
 CsvStorage& CsvStorage::instance()
@@ -36,11 +81,10 @@ CsvStorage::CsvStorage()
 
 void CsvStorage::initializeFilesIfNeeded()
 {
-    using namespace StorageError;
     auto currentDir = QDir::current();
     if (!currentDir.exists(rootDir)) {
         if (currentDir.mkdir(rootDir)) {
-            throw Critical("Mkdir failed");
+            throw Initialization("Mkdir failed");
         }
     }
 
@@ -49,30 +93,34 @@ void CsvStorage::initializeFilesIfNeeded()
     auto fn = wholeFn(fileNameForUsers);
     if (!QFile::exists(fn)) {
         QFile f(fn);
-        if (!f.open(QFile::WriteOnly))
-            throw Critical("Create file for users failed");
+        if (!f.open(QFile::WriteOnly)) {
+            throw Initialization("Create file for users failed");
+        }
         inflateFileForUsers(f);
     }
 
     fn = wholeFn(fileNameForProducts);
     if (!QFile::exists(fn)) {
         QFile f(fn);
-        if (!f.open(QFile::WriteOnly))
-            throw Critical("Create file for products failed");
+        if (!f.open(QFile::WriteOnly)) {
+            throw Initialization("Create file for products failed");
+        }
     }
 
     fn = wholeFn(fileNameForPurchases);
     if (!QFile::exists(fn)) {
         QFile f(fn);
-        if (!f.open(QFile::WriteOnly))
-            throw Critical("Create file for purchases failed");
+        if (!f.open(QFile::WriteOnly)) {
+            throw Initialization("Create file for purchases failed");
+        }
     }
 
     fn = wholeFn(fileNameForCosts);
     if (!QFile::exists(fn)) {
         QFile f(fn);
-        if (!f.open(QFile::WriteOnly))
-            throw Critical("Create file for costs failed");
+        if (!f.open(QFile::WriteOnly)) {
+            throw Initialization("Create file for costs failed");
+        }
     }
 }
 
@@ -80,7 +128,7 @@ void CsvStorage::inflateFileForUsers(QFile& f)
 {
     const QString currentDtStr =
         QDateTime::currentDateTimeUtc().
-            toString(Qt::DateFormat::ISODate);
+            toString(Qt::ISODate);
 
     int id = 0;
     QList<QStringList> users = {
@@ -99,47 +147,34 @@ void CsvStorage::inflateFileForUsers(QFile& f)
             QString::number(static_cast<int>(Role::Client)),
             currentDtStr, QString(""), QString("")
         },
+        //...
     };
 
     for (const auto& user : users) {
-        f.write(user.join(";").toUtf8());
+        f.write(user.join(sep).toUtf8());
         f.write("\r\n");
     }
 }
 
+// public interface
 // -----------------------------------------------------------------------
 
 User CsvStorage::getUserByLogin(const QString& value)
 {
-    using namespace StorageError;
-    const auto fn = wholeFn(fileNameForUsers);
-
-    QFile f(fn);
-    if (!f.open(QFile::ReadOnly))
-        throw Critical("Open file for users failed");
+    QFile f(wholeFn(fileNameForUsers));
+    if (!f.open(QFile::ReadOnly)) {
+        throw Unexpected("Open file for users failed");
+    }
 
     // ***
 
-    const auto trueValidator = UserValidatorFactory::get(ValidatorType::True);
-    const auto regexValidator = UserValidatorFactory::get(ValidatorType::Regex);
-
     while (!f.atEnd()) {
-        const QString line{ f.readLine() };
-        const auto parts = line.split(";");
-
-        if (parts[1] == value) {
-            auto user = User::create(
-                parts[0].toInt(),
-                parts[1], parts[2],
-                strToRole(parts[3]),
-                parts[4], parts[5],
-                trueValidator
-                );
-
-            user.setValidator(regexValidator);
-            return user;
+        const auto parts = readStrs(f);
+        if (parts[1] == value) { // case sensitive!
+            return userFromStrs(parts);
         }
     }
+    f.close();
 
     throw NotFound("User not found");
 }
@@ -147,7 +182,22 @@ User CsvStorage::getUserByLogin(const QString& value)
 User CsvStorage::getUserByCredentials(
     const QString& username, const QString& password)
 {
+    QFile f(wholeFn(fileNameForUsers));
+    if (!f.open(QFile::ReadOnly)) {
+        throw Unexpected("Open file for users failed");
+    }
 
+    // ***
+
+    while (!f.atEnd()) {
+        const auto parts = readStrs(f);
+        if (parts[1] == username && parts[2] == password) {
+            return userFromStrs(parts);
+        }
+    }
+    f.close();
+
+    throw NotFound("User not found");
 }
 
 int CsvStorage::insertUser(const User& user)

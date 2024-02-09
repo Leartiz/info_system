@@ -9,6 +9,7 @@ enum class Role : int {
     Admin
 };
 
+Role makeRole(int);
 QString roleToString(const Role);
 Role strToRole(const QString&);
 

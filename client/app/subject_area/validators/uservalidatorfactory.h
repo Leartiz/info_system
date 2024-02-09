@@ -9,6 +9,9 @@
 class UserValidatorFactory
 {
 public:
+    static const UserValidatorSp regexInstance;
+    static const UserValidatorSp trueInstance;
+
     static UserValidatorSp get(ValidatorType);
 };
 

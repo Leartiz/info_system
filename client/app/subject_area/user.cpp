@@ -9,10 +9,10 @@
 User::User(Role role): role(role) {}
 
 User User::create(
-    std::optional<int> id,
-    const QString& username, const QString& password,
-    Role role, const QString& fullName, const QString& passport,
-    std::shared_ptr<UserValidator> validator
+    UserValidatorSp validator,
+    const QString& username, const QString& password, Role role,
+    const QString& fullName, const QString& passport,
+    std::optional<int> id, const QDateTime& dateTime
     )
 {
     if (!validator) {
@@ -33,6 +33,9 @@ User User::create(
     if (!validator->isValidPassport(passport)) {
         throw std::runtime_error("Passport is invalid");
     }
+    if (!dateTime.isValid()) {
+        throw std::runtime_error("Date and time is invalid");
+    }
 
     // ***
 
@@ -43,13 +46,13 @@ User User::create(
     user.username = username;
     user.password = password;
 
-    user.signUpDateTime = QDateTime::currentDateTimeUtc();
+    user.signUpDateTime = dateTime;
     user.fullName = fullName;
     user.passport = passport;
     return user;
 }
 
-QString User::toString() const
+QString User::toJsonString() const
 {
     return QJsonDocument{
         QJsonObject{

@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QValidator>
 
+#include "messageforclient.h"
 #include "entrywindow.h"
 #include "ui_entrywindow.h"
 
@@ -9,12 +10,16 @@
 #include "storage/storagefactory.h"
 #include "subject_area/validators/regexuservalidator.h"
 
+using MessageForClient::Warning;
+using MessageForClient::Critical;
+
 EntryWindow::EntryWindow(QWidget *parent) :
     QDialog(parent), ui(new Ui::EntryWindow),
     storage(StorageFactory::get(StorageFactory::Csv))
 {
     ui->setupUi(this);
 
+    // validators
     {
         ui->lineEditLogin->setValidator(
             new QRegularExpressionValidator(
@@ -24,6 +29,7 @@ EntryWindow::EntryWindow(QWidget *parent) :
                 RegexUserValidator::passwordRegex(), this));
     }
 
+    // ui
     {
         connect(ui->pushBtnSignIn, &QPushButton::clicked,
                 this, &EntryWindow::onClicked_pushBtnSignIn);
@@ -42,22 +48,30 @@ void EntryWindow::onClicked_pushBtnSignIn()
     qDebug() << "EntryWindow::onClicked_pushBtnSignIn()";
 
     try {
-//        User user = storage.getUserByCredentials(
-//            ui->lineEditLogin->text(),
-//            ui->lineEditPass->text());
+        const User user = storage.getUserByCredentials(
+            ui->lineEditLogin->text(),
+            ui->lineEditPass->text()
+            );
 
-    User user = storage.getUserByLogin(
-            ui->lineEditLogin->text());
-        qDebug() << user.toString();
+        qInfo() << user.toJsonString();
+        emit successful(user);
 
-
-    } catch(const StorageError::NotFound&) {
+    } catch(const StorageError::NotFound& err) {
+        qWarning() << err.what();
         QMessageBox::warning(
             this, windowTitle(),
-            tr("Пользователь с такими реквизитами не найден")
+            Warning::userByCredentialsNotFound()
             );
         return;
-    }
+    } catch(const std::runtime_error& err) {
+        qCritical() << err.what();
+        QMessageBox::warning(
+            this, windowTitle(),
+            Critical::unexpectedError() +
+                " : " + err.what()
+            );
 
-    emit successful();
+        qApp->quit();
+        return;
+    }
 }

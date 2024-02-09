@@ -6,6 +6,7 @@ SOURCES += \
     $$PWD/../app/subject_area/role.cpp \
     $$PWD/../app/subject_area/user.cpp \
     $$PWD/../app/subject_area/validators/regexuservalidator.cpp \
+    $$PWD/messageforclient.cpp \
     $$PWD/storage/storageerror.cpp \
     $$PWD/subject_area/validators/uservalidatorfactory.cpp
 
@@ -19,6 +20,7 @@ HEADERS += \
     $$PWD/../app/subject_area/validators/regexuservalidator.h \
     $$PWD/../app/subject_area/validators/trueuservalidator.h \
     $$PWD/../app/subject_area/validators/uservalidator.h \
+    $$PWD/messageforclient.h \
     $$PWD/storage/storageerror.h \
     $$PWD/subject_area/validators/uservalidatorfactory.h \
     $$PWD/subject_area/validators/validatortype.h

@@ -7,7 +7,7 @@
 
 namespace Ui {
 class EntryWindow;
-}
+} // namespace Ui
 
 class EntryWindow : public QDialog
 {
@@ -21,7 +21,7 @@ public slots:
     void onClicked_pushBtnSignIn();
 
 signals:
-    void successful();
+    void successful(const User&);
 
 private:
     Ui::EntryWindow *ui;

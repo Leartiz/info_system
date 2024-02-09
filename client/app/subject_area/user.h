@@ -14,12 +14,13 @@ class User final
 {
 public:
     static User create(
-        std::optional<int> id,
-        const QString& username, const QString& password,
-        Role role, const QString& fullName, const QString& passport,
-        UserValidatorSp validator
+        UserValidatorSp validator,
+        const QString& username, const QString& password, Role role,
+        const QString& fullName, const QString& passport,
+        std::optional<int> id = std::nullopt,
+        const QDateTime& dateTime = QDateTime::currentDateTimeUtc()
         );
-    QString toString() const;
+    QString toJsonString() const;
 
 public:
     void setValidator(UserValidatorSp validator);
@@ -38,6 +39,7 @@ public:
 public:
     void setUsername(const QString& value);
     void setPassword(const QString& value);
+    //...
 
 private:
     explicit User(Role role = Role::Client);

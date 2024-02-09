@@ -4,6 +4,14 @@
 #include "regexuservalidator.h"
 #include "trueuservalidator.h"
 
+const UserValidatorSp UserValidatorFactory::regexInstance{
+    get(ValidatorType::Regex)
+};
+
+const UserValidatorSp UserValidatorFactory::trueInstance{
+    get(ValidatorType::True)
+};
+
 UserValidatorSp UserValidatorFactory::get(ValidatorType value)
 {
     switch (value) {

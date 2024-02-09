@@ -14,7 +14,14 @@ struct Base : public std::runtime_error
     QString text() const;
 };
 
-struct Critical : public Base
+// -----------------------------------------------------------------------
+
+struct Unexpected : public Base // as runtime_error
+{
+    using Base::Base;
+};
+
+struct Initialization : public Base
 {
     using Base::Base;
 };
