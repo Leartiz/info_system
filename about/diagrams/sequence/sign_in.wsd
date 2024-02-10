@@ -18,7 +18,7 @@ user -> entry_window : Вводит логин и пароль
 user -> entry_window : Нажимает кнопку "Войти"
 
 entry_window -> entry_window : Первоначальная\nобработка формы
-alt успех
+alt Успех
     entry_window -> file_storage : Поиск пользователя\nпо логину и паролю
     file_storage --> entry_window
     entry_window -> entry_window : Обработка ответа
@@ -34,7 +34,7 @@ alt успех
         err_window --> user
         ...
     end
-else некорректный логин или пароль
+else Некорректный логин или пароль
     entry_window -> err_window : Создать
     ...
     err_window --> user

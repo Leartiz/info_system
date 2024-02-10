@@ -2,6 +2,8 @@
 
 !include ../styles.wsd
 
+' -----------------------------------------------
+
 actor "Администратор" as admin
 
 boundary "  Главное Окно\nАдминистратора" as admin_window
@@ -12,7 +14,7 @@ entity "Файловое\nХранилище" as file_storage
 
 control "   Отобразить\nОкно Добавления\n  Пользователя" as display_add_user_window
 control "Отобразить\nОкно Ошибки" as display_err_window #red
-control "Валидировать\nДанные Пользователя" as process_user_data
+control "       Валидировать\nДанные Пользователя" as process_user_data
 control "Добаить\nНового Пользователя" as add_new_user
 
 ' -----------------------------------------------
