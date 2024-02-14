@@ -2,26 +2,28 @@
 
 !include styles.wsd
 
+left to right direction
+
+' nodes
 ' -----------------------------------------------
 
 actor "Администратор" as admin
 
 usecase "Войти В Систему" as sign_in
 usecase "Добавить Пользователя" as add_user
+usecase "Удалить Пользователя" as del_user
+usecase "Просмотр Списка\nПользователей" as view_user_list
+usecase "Поиск Пользователя" as find_user
+usecase "Сортировать Пользователей\nПо Признаку" as sort_users
 
-left to right direction
+' edges
+' -----------------------------------------------
 
 admin -u-> sign_in
 admin -u-> add_user
-admin -u-> (Удалить Пользователя)
-admin --> (Просмотр Списка\nПользователей)
-admin --> (Поиск Пользователя)
-admin --> (Сортировать Пользователей\nПо Признаку)
+admin -u-> del_user
+admin --> view_user_list
+admin --> find_user
+admin --> sort_users
 
 @enduml
-
-' Сигнал слоты
-' Цикл обработки событий
-' Автоматическая проверка диаграмм.
-' Соответветсвие дигарамм и клссов  кодле
-' Подходы к реализации

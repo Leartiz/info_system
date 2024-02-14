@@ -6,15 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>193</height>
+    <width>325</width>
+    <height>208</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>240</width>
+    <width>325</width>
     <height>0</height>
    </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Ломбард</string>
@@ -131,6 +136,13 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pushBtnSignUp">
+         <property name="text">
+          <string>Регистрация</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">

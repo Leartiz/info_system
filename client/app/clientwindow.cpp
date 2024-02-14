@@ -6,6 +6,11 @@ ClientWindow::ClientWindow(QWidget *parent) :
     ui(new Ui::ClientWindow)
 {
     ui->setupUi(this);
+
+    // validators
+    {
+
+    }
 }
 
 ClientWindow::~ClientWindow()

@@ -16,4 +16,6 @@ public:
     static Storage& get(Type);
 };
 
+using StorageType = StorageFactory::Type;
+
 #endif // STORAGEFACTORY_H

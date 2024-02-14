@@ -5,6 +5,11 @@
 namespace MessageForClient
 {
 
+QString Warning::loginOrPassIsEmpty()
+{
+    return QObject::tr("Логин или пароль пуст");
+}
+
 QString Warning::userByCredentialsNotFound()
 {
     return QObject::tr("Пользователь с такими реквизитами не найден");

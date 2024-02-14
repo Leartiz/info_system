@@ -7,11 +7,11 @@
 actor "Пользователь" as user #Gray
 
 actor "Администратор" as admin
-actor "Сотрудник" as employee
+actor "Сотрудник" as worker
 actor "Клиент" as client
 
 client -|> user
-employee -|> client
-admin -|> employee
+worker -|> client
+admin -|> worker
 
 @enduml

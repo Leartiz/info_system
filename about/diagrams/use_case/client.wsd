@@ -2,25 +2,43 @@
 
 !include styles.wsd
 
+left to right direction
+
+' nodes
 ' -----------------------------------------------
 
 actor "Клиент" as client
 
-left to right direction
+usecase "Регистрация" as sign_up
+usecase "Войти В Систему" as sign_in
+usecase "Выкупить Вещь" as buy_back_item
+usecase "Просмотр Истории\nСданных Вещей" as view_given_away_items
+
+usecase "Просмотр Списка\nТоваров" as view_product_list
+usecase "Поиск Товара" as find_product
+usecase "Добавить Товар\nВ Корзину" as add_product_to_cart
+usecase "Совершить Покупку" as make_purchase
+usecase "Просмотр Истории Покупок" as view_purchase_history
+
+' edges
+' -----------------------------------------------
 
 ' Сообщает ФИО, паспорт
-client -r-> (Регистрация)
-client -l-> (Войти В Систему)
+client -r-> sign_up
+client -l-> sign_in
 
-client --> (Просмотр Истории\nСданных Вещей)
-client -u-> (Просмотр Списка\nТоваров)
+client --> view_given_away_items
 
-client -u-> (Поиск Товара)
-client -u-> (Добавить Товар\nВ Корзину)
-client -u-> (Совершить Покупку)
-client -d-> (Просмотр Истории Покупок)
+' Это мог бы сделать и сотрудник.
+client --> buy_back_item
 
+client -u-> view_product_list
+client -u-> find_product
+client -u-> add_product_to_cart
+client -u-> make_purchase
+client -d-> view_purchase_history
+
+' Можно клиенту дать и такую возможность.
 ' client --> (Получить Деньги Под Залог)
-' client --> (Выкупить Вещь)
 
 @enduml

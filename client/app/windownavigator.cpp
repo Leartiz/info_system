@@ -1,16 +1,18 @@
 #include "windownavigator.h"
 #include "entrywindow.h"
 
+#include "adminwindow.h"
 #include "clientwindow.h"
 #include "workerwindow.h"
-#include "adminwindow.h"
 
-WindowNavigator::WindowNavigator()
-    : entryWindow(new EntryWindow)
+WindowNavigator::WindowNavigator(
+    Storage& storage, QObject* parent)
+    : QObject(parent)
+    , entryWindow(nullptr)
     , windowForRole(nullptr)
+    , storage(storage)
 {
-    connectToEntry();
-    entryWindow->show();
+    createAndShowEntry();
 }
 
 // -----------------------------------------------------------------------
@@ -26,30 +28,23 @@ void WindowNavigator::onSuccessful_entryWindow(
     switch (user.getRole()) {
     case Role::Client:
         {
-            auto window = new ClientWindow;
-            {
-
-            }
+            auto *window = new ClientWindow;
             windowForRole.reset(window);
+            connectToClient(window);
         }
         break;
     case Role::Worker:
         {
-            auto window = new WorkerWindow;
-            {
-                connect(window, &WorkerWindow::logout,
-                        this, &WindowNavigator::onLogout_windowForRole);
-            }
+            auto *window = new WorkerWindow;
             windowForRole.reset(window);
+            connectToWorker(window);
         }
         break;
     case Role::Admin:
         {
-            auto window = new AdminWindow;
-            {
-
-            }
+            auto *window = new AdminWindow;
             windowForRole.reset(window);
+            connectToAdmin(window);
         }
         break;
     default:
@@ -63,7 +58,7 @@ void WindowNavigator::onLogout_windowForRole()
 {
     hideAndRemoveForRole();
 
-    entryWindow.reset(new EntryWindow);
+    entryWindow.reset(new EntryWindow(storage));
     connectToEntry();
     entryWindow->show();
 }
@@ -72,11 +67,27 @@ void WindowNavigator::onLogout_windowForRole()
 
 void WindowNavigator::connectToEntry()
 {
-    {
-        connect(entryWindow.get(), &EntryWindow::successful,
-                this, &WindowNavigator::onSuccessful_entryWindow);
-    }
+    connect(entryWindow.get(), &EntryWindow::successful,
+            this, &WindowNavigator::onSuccessful_entryWindow);
 }
+
+void WindowNavigator::connectToAdmin(AdminWindow*)
+{
+
+}
+
+void WindowNavigator::connectToWorker(WorkerWindow* window)
+{
+    connect(window, &WorkerWindow::logout,
+            this, &WindowNavigator::onLogout_windowForRole);
+}
+
+void WindowNavigator::connectToClient(ClientWindow*)
+{
+
+}
+
+// -----------------------------------------------------------------------
 
 void WindowNavigator::hideAndRemoveEntry()
 {
@@ -88,4 +99,13 @@ void WindowNavigator::hideAndRemoveForRole()
 {
     windowForRole->hide();
     windowForRole.reset();
+}
+
+void WindowNavigator::createAndShowEntry()
+{
+    entryWindow.reset(
+        new EntryWindow(storage));
+
+    connectToEntry();
+    entryWindow->show();
 }

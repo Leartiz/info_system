@@ -11,6 +11,7 @@ CONFIG += c++17
 FORMS += \
     adduserwindow.ui \
     adminwindow.ui \
+    clientregwindow.ui \
     clientwindow.ui \
     entrywindow.ui \
     mainwindow.ui \
@@ -27,6 +28,7 @@ message($$PWD/../app)
 SOURCES += \
     adduserwindow.cpp \
     adminwindow.cpp \
+    clientregwindow.cpp \
     clientwindow.cpp \
     entrywindow.cpp \
     mainwindow.cpp \
@@ -37,6 +39,7 @@ SOURCES += \
 HEADERS += \
     adduserwindow.h \
     adminwindow.h \
+    clientregwindow.h \
     clientwindow.h \
     entrywindow.h \
     mainwindow.h \

@@ -3,12 +3,16 @@
 
 #include <memory>
 
-#include <QObject>
 #include <QMainWindow>
+#include <QObject>
 
 #include "entrywindow.h"
+#include "storage/storage.h"
 
-class EntryWindow;
+class AdminWindow;
+class WorkerWindow;
+class ClientWindow;
+
 class User;
 
 class WindowNavigator : public QObject
@@ -16,7 +20,8 @@ class WindowNavigator : public QObject
     Q_OBJECT
 
 public:
-    WindowNavigator();
+    explicit WindowNavigator(Storage& storage,
+                             QObject* parent = nullptr);
 
 public slots:
     void onSuccessful_entryWindow(const User& user);
@@ -27,9 +32,17 @@ private:
     void hideAndRemoveEntry();
     void connectToEntry();
 
+    void connectToAdmin(AdminWindow*);
+    void connectToWorker(WorkerWindow*);
+    void connectToClient(ClientWindow*);
+
 private:
     std::unique_ptr<QMainWindow> windowForRole;
     void hideAndRemoveForRole();
+    void createAndShowEntry();
+
+private:
+    Storage& storage;
 };
 
 #endif // WINDOWNAVIGATOR_H

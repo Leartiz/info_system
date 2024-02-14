@@ -8,6 +8,7 @@ namespace MessageForClient
 
 struct Warning
 {
+    static QString loginOrPassIsEmpty();
     static QString userByCredentialsNotFound();
 };
 

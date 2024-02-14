@@ -17,11 +17,61 @@ using StorageError::Initialization;
 namespace
 {
 
+void openedFileForRead(QFile& closedFile, const QString& fn) {
+    closedFile.setFileName(CsvStorage::wholeFn(fn));
+
+    if (!closedFile.open(QFile::ReadOnly)) {
+        throw Unexpected(
+            QString{ "Open file %1 for read failed" }.
+            arg(fn)
+            );
+    }
+}
+
+void openedFileForAppend(QFile& closedFile, const QString& fn) {
+    closedFile.setFileName(CsvStorage::wholeFn(fn));
+
+    if (!closedFile.open(QFile::Append)) {
+        throw Unexpected(
+            QString{ "Open file %1 for append failed" }.
+            arg(fn)
+            );
+    }
+}
+
+int lineCount(QFile& f)
+{
+    int count = 0;
+    QTextStream ts(&f);
+    while (!f.atEnd()) {
+        static_cast<void>(ts.readLine());
+        ++count;
+    }
+    return count;
+}
+
+// -----------------------------------------------------------------------
+
+QString currentDtUtcStr()
+{
+    return QDateTime::currentDateTimeUtc().
+        toString(Qt::ISODate);
+}
+
 QStringList readStrs(QFile& f)
 {
     const QString line{ f.readLine() };
     return line.split(CsvStorage::sep);
 }
+
+void writeLine(QFile& f, const QStringList& strs)
+{
+    f.write(strs.join(CsvStorage::sep).toUtf8());
+    f.write("\r\n");
+}
+
+// from strs
+// -----------------------------------------------------------------------
 
 User userFromStrs(const QStringList& strs)
 {
@@ -75,8 +125,13 @@ CsvStorage& CsvStorage::instance()
 }
 
 CsvStorage::CsvStorage()
+    : nextUserId(0)
+    , nextProductId(0)
+    , nextPurchaseId(0)
+    , nextCostId(0)
 {
     initializeFilesIfNeeded();
+    initializeIdrs();
 }
 
 void CsvStorage::initializeFilesIfNeeded()
@@ -126,12 +181,10 @@ void CsvStorage::initializeFilesIfNeeded()
 
 void CsvStorage::inflateFileForUsers(QFile& f)
 {
-    const QString currentDtStr =
-        QDateTime::currentDateTimeUtc().
-            toString(Qt::ISODate);
+    const QString currentDtStr = currentDtUtcStr();
 
     int id = 0;
-    QList<QStringList> users = {
+    QList<QStringList> userLines = {
         {
             QString::number(id++), QString("admin"), QString("admin"),
             QString::number(static_cast<int>(Role::Admin)),
@@ -150,23 +203,49 @@ void CsvStorage::inflateFileForUsers(QFile& f)
         //...
     };
 
-    for (const auto& user : users) {
-        f.write(user.join(sep).toUtf8());
-        f.write("\r\n");
+    for (const auto& userLine : userLines) {
+        writeLine(f, userLine);
+    }
+}
+
+void CsvStorage::initializeIdrs()
+{
+    QVector<QPair<QString, int*>> idrs{
+        { fileNameForUsers, &nextUserId },
+        { fileNameForProducts, &nextProductId },
+        { fileNameForPurchases, &nextPurchaseId },
+        { fileNameForCosts, &nextCostId },
+    };
+
+    for (int i = 0; i < idrs.size(); ++i) {
+        QFile f; openedFileForRead(f, fileNameForUsers);
+        *idrs[i].second = lineCount(f) + 1;
     }
 }
 
 // public interface
 // -----------------------------------------------------------------------
 
+User CsvStorage::getUserById(const int value)
+{
+    QFile f;
+    openedFileForRead(f, fileNameForUsers);
+
+    const auto strId = QString::number(value);
+    while (!f.atEnd()) {
+        const auto parts = readStrs(f);
+        if (parts[0] == strId) {
+            return userFromStrs(parts);
+        }
+    }
+    f.close();
+    throw NotFound("User");
+}
+
 User CsvStorage::getUserByLogin(const QString& value)
 {
-    QFile f(wholeFn(fileNameForUsers));
-    if (!f.open(QFile::ReadOnly)) {
-        throw Unexpected("Open file for users failed");
-    }
-
-    // ***
+    QFile f;
+    openedFileForRead(f, fileNameForUsers);
 
     while (!f.atEnd()) {
         const auto parts = readStrs(f);
@@ -175,17 +254,14 @@ User CsvStorage::getUserByLogin(const QString& value)
         }
     }
     f.close();
-
-    throw NotFound("User not found");
+    throw NotFound("User");
 }
 
 User CsvStorage::getUserByCredentials(
     const QString& username, const QString& password)
 {
-    QFile f(wholeFn(fileNameForUsers));
-    if (!f.open(QFile::ReadOnly)) {
-        throw Unexpected("Open file for users failed");
-    }
+    QFile f;
+    openedFileForRead(f, fileNameForUsers);
 
     // ***
 
@@ -196,11 +272,23 @@ User CsvStorage::getUserByCredentials(
         }
     }
     f.close();
-
-    throw NotFound("User not found");
+    throw NotFound("User");
 }
 
 int CsvStorage::insertUser(const User& user)
 {
-    return 0;
+    QFile f;
+    openedFileForAppend(f, fileNameForUsers);
+
+    QStringList userLine = {
+        QString::number(nextUserId),
+        user.getUsername(), user.getPassword(),
+        QString::number(static_cast<int>(user.getRole())),
+        currentDtUtcStr(), user.getFullName(), user.getPassport()
+    };
+
+    writeLine(f, userLine);
+    f.close();
+
+    return nextUserId++;
 }

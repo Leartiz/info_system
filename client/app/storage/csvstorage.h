@@ -22,6 +22,7 @@ public:
     static CsvStorage& instance();
 
 public:
+    User getUserById(const int value) override;
     User getUserByLogin(const QString& value) override;
     User getUserByCredentials(const QString& username,
                               const QString& password) override;
@@ -33,6 +34,7 @@ private:
     CsvStorage();
     void initializeFilesIfNeeded();
     void inflateFileForUsers(QFile& f);
+    void initializeIdrs();
 
 private:
     int nextUserId;
