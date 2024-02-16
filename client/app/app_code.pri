@@ -1,5 +1,5 @@
 SOURCES += \
-    $$PWD/../app/storage/csvstorage.cpp \
+    $$PWD/../app/storage/csv_storage/csvstorage.cpp \
     $$PWD/../app/storage/storage.cpp \
     $$PWD/../app/storage/storagefactory.cpp \
     $$PWD/../app/subject_area/product.cpp \
@@ -11,7 +11,7 @@ SOURCES += \
     $$PWD/subject_area/validators/uservalidatorfactory.cpp
 
 HEADERS += \
-    $$PWD/../app/storage/csvstorage.h \
+    $$PWD/../app/storage/csv_storage/csvstorage.h \
     $$PWD/../app/storage/storage.h \
     $$PWD/../app/storage/storagefactory.h \
     $$PWD/../app/subject_area/product.h \

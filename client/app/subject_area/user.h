@@ -3,9 +3,9 @@
 
 #include <optional>
 
-#include <QString>
 #include <QDateTime>
 #include <QRegularExpression>
+#include <QString>
 
 #include "role.h"
 #include "validators/uservalidator.h"

@@ -11,4 +11,4 @@ QString Base::text() const
     return QString(what());
 }
 
-}
+} // namespace StorageError

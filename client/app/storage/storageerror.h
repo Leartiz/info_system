@@ -31,7 +31,7 @@ struct NotFound : public Base
     using Base::Base;
 };
 
-}
+} // namespace StorageError
 
 
 #endif // STORAGEERROR_H

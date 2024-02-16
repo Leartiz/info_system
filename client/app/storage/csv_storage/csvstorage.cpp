@@ -8,7 +8,7 @@
 #include "subject_area/validators/uservalidatorfactory.h"
 
 #include "csvstorage.h"
-#include "storageerror.h"
+#include "storage/storageerror.h"
 
 using StorageError::NotFound;
 using StorageError::Unexpected;

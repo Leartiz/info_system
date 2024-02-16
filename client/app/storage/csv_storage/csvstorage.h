@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QString>
 
-#include "storage.h"
+#include "storage/storage.h"
 #include "subject_area/user.h"
 
 class CsvStorage : public Storage
