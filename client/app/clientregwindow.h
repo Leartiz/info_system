@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "storage/storage.h"
+#include "storage/userstorage.h"
 
 namespace Ui {
 class ClientRegWindow;
@@ -14,7 +14,7 @@ class ClientRegWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClientRegWindow(Storage& storage,
+    explicit ClientRegWindow(UserStorage& storage,
                              QWidget *parent = nullptr);
     ~ClientRegWindow() override;
 
@@ -24,7 +24,7 @@ public slots:
 
 private:
     Ui::ClientRegWindow *ui;
-    Storage& storage;
+    UserStorage& storage;
 };
 
 #endif // CLIENTREGWINDOW_H

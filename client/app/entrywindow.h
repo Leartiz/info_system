@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "storage/storage.h"
+#include "storage/userstorage.h"
 
 namespace Ui {
 class EntryWindow;
@@ -14,7 +14,7 @@ class EntryWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit EntryWindow(Storage& storage,
+    explicit EntryWindow(UserStorage& storage,
                          QWidget *parent = nullptr);
     ~EntryWindow() override;
 
@@ -31,7 +31,7 @@ protected:
 
 private:
     Ui::EntryWindow *ui;
-    Storage& storage;
+    UserStorage& storage;
 };
 
 #endif // ENTRYWINDOW_H

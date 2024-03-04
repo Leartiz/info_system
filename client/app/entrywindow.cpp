@@ -18,7 +18,7 @@
 using MessageForClient::Warning;
 using MessageForClient::Critical;
 
-EntryWindow::EntryWindow(Storage& storage, QWidget *parent)
+EntryWindow::EntryWindow(UserStorage& storage, QWidget *parent)
     : QDialog(parent), ui(new Ui::EntryWindow)
     , storage(storage)
 {

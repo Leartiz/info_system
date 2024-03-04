@@ -7,7 +7,7 @@
 #include <QObject>
 
 #include "entrywindow.h"
-#include "storage/storage.h"
+#include "storage/userstorage.h"
 
 class AdminWindow;
 class WorkerWindow;
@@ -20,7 +20,7 @@ class WindowNavigator : public QObject
     Q_OBJECT
 
 public:
-    explicit WindowNavigator(Storage& storage,
+    explicit WindowNavigator(UserStorage& storage,
                              QObject* parent = nullptr);
 
 public slots:
@@ -42,7 +42,7 @@ private:
     void createAndShowEntry();
 
 private:
-    Storage& storage;
+    UserStorage& storage;
 };
 
 #endif // WINDOWNAVIGATOR_H

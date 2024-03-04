@@ -6,7 +6,7 @@
 #include "workerwindow.h"
 
 WindowNavigator::WindowNavigator(
-    Storage& storage, QObject* parent)
+    UserStorage& storage, QObject* parent)
     : QObject(parent)
     , entryWindow(nullptr)
     , windowForRole(nullptr)

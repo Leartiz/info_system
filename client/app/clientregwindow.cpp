@@ -9,7 +9,7 @@
 
 #include "subject_area/validators/regexuservalidator.h"
 
-ClientRegWindow::ClientRegWindow(Storage& storage, QWidget *parent)
+ClientRegWindow::ClientRegWindow(UserStorage& storage, QWidget *parent)
     : QDialog(parent), ui(new Ui::ClientRegWindow)
     , storage(storage)
 {

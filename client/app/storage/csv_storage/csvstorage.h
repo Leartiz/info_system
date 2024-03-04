@@ -13,7 +13,7 @@ public:
     static const QString sep;
     static const QString rootDir;
 
-    static const QString fileNameForUsers;
+
     static const QString fileNameForProducts;
     static const QString fileNameForPurchases;
     static const QString fileNameForCosts;
