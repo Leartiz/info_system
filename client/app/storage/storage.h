@@ -1,9 +1,10 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
-#include "userstorage.h"
-
-class Storage : public UserStorage
-{};
+class Storage
+{
+public:
+    virtual ~Storage() = 0;
+};
 
 #endif // STORAGE_H

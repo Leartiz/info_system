@@ -14,21 +14,7 @@ using StorageError::NotFound;
 using StorageError::Unexpected;
 using StorageError::Initialization;
 
-namespace
-{
-
-void openedFileForRead(QFile& closedFile, const QString& fn) {
-    closedFile.setFileName(CsvStorage::wholeFn(fn));
-
-    if (!closedFile.open(QFile::ReadOnly)) {
-        throw Unexpected(
-            QString{ "Open file %1 for read failed" }.
-            arg(fn)
-            );
-    }
-}
-
-void openedFileForAppend(QFile& closedFile, const QString& fn) {
+void CsvStorage::openedFileForAppend(QFile& closedFile, const QString& fn) {
     closedFile.setFileName(CsvStorage::wholeFn(fn));
 
     if (!closedFile.open(QFile::Append)) {
@@ -39,7 +25,18 @@ void openedFileForAppend(QFile& closedFile, const QString& fn) {
     }
 }
 
-int lineCount(QFile& f)
+void CsvStorage::openedFileForRead(QFile& closedFile, const QString& fn) {
+    closedFile.setFileName(CsvStorage::wholeFn(fn));
+
+    if (!closedFile.open(QFile::ReadOnly)) {
+        throw Unexpected(
+            QString{ "Open file %1 for read failed" }.
+            arg(fn)
+            );
+    }
+}
+
+int CsvStorage::lineCount(QFile& f)
 {
     int count = 0;
     QTextStream ts(&f);
@@ -49,6 +46,11 @@ int lineCount(QFile& f)
     }
     return count;
 }
+
+namespace
+{
+
+
 
 // -----------------------------------------------------------------------
 
@@ -226,69 +228,3 @@ void CsvStorage::initializeIdrs()
 // public interface
 // -----------------------------------------------------------------------
 
-User CsvStorage::getUserById(const int value)
-{
-    QFile f;
-    openedFileForRead(f, fileNameForUsers);
-
-    const auto strId = QString::number(value);
-    while (!f.atEnd()) {
-        const auto parts = readStrs(f);
-        if (parts[0] == strId) {
-            return userFromStrs(parts);
-        }
-    }
-    f.close();
-    throw NotFound("User");
-}
-
-User CsvStorage::getUserByLogin(const QString& value)
-{
-    QFile f;
-    openedFileForRead(f, fileNameForUsers);
-
-    while (!f.atEnd()) {
-        const auto parts = readStrs(f);
-        if (parts[1] == value) { // case sensitive!
-            return userFromStrs(parts);
-        }
-    }
-    f.close();
-    throw NotFound("User");
-}
-
-User CsvStorage::getUserByCredentials(
-    const QString& username, const QString& password)
-{
-    QFile f;
-    openedFileForRead(f, fileNameForUsers);
-
-    // ***
-
-    while (!f.atEnd()) {
-        const auto parts = readStrs(f);
-        if (parts[1] == username && parts[2] == password) {
-            return userFromStrs(parts);
-        }
-    }
-    f.close();
-    throw NotFound("User");
-}
-
-int CsvStorage::insertUser(const User& user)
-{
-    QFile f;
-    openedFileForAppend(f, fileNameForUsers);
-
-    QStringList userLine = {
-        QString::number(nextUserId),
-        user.getUsername(), user.getPassword(),
-        QString::number(static_cast<int>(user.getRole())),
-        currentDtUtcStr(), user.getFullName(), user.getPassport()
-    };
-
-    writeLine(f, userLine);
-    f.close();
-
-    return nextUserId++;
-}

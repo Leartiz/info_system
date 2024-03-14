@@ -8,7 +8,9 @@ SOURCES += \
     $$PWD/../app/subject_area/validators/regexuservalidator.cpp \
     $$PWD/messageforclient.cpp \
     $$PWD/storage/csv_storage/csvmodelstorage.cpp \
+    $$PWD/storage/csv_storage/csvpawnstorage.cpp \
     $$PWD/storage/csv_storage/csvuserstorage.cpp \
+    $$PWD/storage/csv_storage/csvstoragefactory.cpp \
     $$PWD/storage/storage.cpp \
     $$PWD/storage/storageerror.cpp \
     $$PWD/subject_area/validators/uservalidatorfactory.cpp
@@ -25,7 +27,11 @@ HEADERS += \
     $$PWD/../app/subject_area/validators/uservalidator.h \
     $$PWD/messageforclient.h \
     $$PWD/storage/csv_storage/csvmodelstorage.h \
+    $$PWD/storage/csv_storage/csvpawnstorage.h \
     $$PWD/storage/csv_storage/csvuserstorage.h \
+    $$PWD/storage/csv_storage/csvstoragefactory.h \
+    $$PWD/storage/pawnstorage.h \
+    $$PWD/storage/productstorage.h \
     $$PWD/storage/storage.h \
     $$PWD/storage/storageerror.h \
     $$PWD/subject_area/validators/uservalidatorfactory.h \

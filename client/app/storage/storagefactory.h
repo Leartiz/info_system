@@ -1,7 +1,11 @@
 #ifndef STORAGEFACTORY_H
 #define STORAGEFACTORY_H
 
-#include "storage.h"
+#include "userstorage.h"
+#include "pawnstorage.h"
+
+class StorageFactory;
+using StorageFactorySp = std::shared_ptr<StorageFactory>;
 
 class StorageFactory
 {
@@ -11,11 +15,14 @@ public:
 
         // Json, Xml, Sqlite
     };
+    static StorageFactorySp get(Type);
 
 public:
-    static Storage& get(Type);
+    virtual UserStorageSp createUserStorage() = 0;
+    virtual PawnStorageSp createPawnStorage() = 0;
 };
 
 using StorageType = StorageFactory::Type;
+using StorageFactorySp = std::shared_ptr<StorageFactory>;
 
 #endif // STORAGEFACTORY_H

@@ -1,6 +1,6 @@
 #include "storage.h"
 
-Storage::Storage()
+Storage::~Storage()
 {
 
 }

@@ -1,12 +1,12 @@
 #include <stdexcept>
 
-#include "csv_storage/csvstorage.h"
+#include "csv_storage/csvstoragefactory.h"
 #include "storagefactory.h"
 
-Storage& StorageFactory::get(Type value)
+StorageFactorySp StorageFactory::get(Type value)
 {
     switch (value) {
-    case Csv: return CsvStorage::instance();
+    case Csv: return CsvStorageFactory::create();
     }
 
     throw std::runtime_error("Unknown storage type");

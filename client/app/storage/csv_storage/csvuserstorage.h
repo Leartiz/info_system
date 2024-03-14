@@ -1,9 +1,11 @@
 #ifndef CSVUSERSTORAGE_H
 #define CSVUSERSTORAGE_H
 
+#include "csvstorage.h"
 #include "storage/userstorage.h"
 
-class CsvUserStorage : public UserStorage
+class CsvUserStorage : public CsvStorage,
+                       public UserStorage
 {
 public:
     static const QString fileName;
