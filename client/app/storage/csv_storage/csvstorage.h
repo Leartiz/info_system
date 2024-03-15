@@ -11,23 +11,28 @@ class CsvStorage : public Storage
 public:
     static const QString sep;
     static const QString rootDir;
-    static QString wholeFn(const QString& fn);
+    static QString makeWholeFn(const QString& fn);
 
 protected:
-    static void openedFileForAppend(QFile& closedFile, const QString& fn);
-    static void openedFileForRead(QFile& closedFile, const QString& fn);
+    static void openedFileFor(QFile& closedFile, const QString& fn,
+                              const QFile::OpenMode om);
     static int lineCount(QFile& f);
+
+    static void writeLine(QFile& f, const QStringList& strs);
+    static QStringList readStrs(QFile& f);
 
 protected:
     explicit CsvStorage(const QString& fn);
+    void initializeFileIfNeeded() const;
+    mutable bool filePreviouslyExisted{ true };
 
-private:
-    void initializeFilesIfNeeded();
-    void inflateFileForUsers(QFile& f);
-    void initializeIdrs();
+    QString wholeFn;
+    int nextId{ 0 };
 
-private:
-    int nextUserId;
+protected:
+    virtual void inflateFileIfNeeded() const = 0;
+    virtual void initializeNextId() const = 0;
+    ~CsvStorage() override = 0;
 };
 
 #endif // CSVSTORAGE_H

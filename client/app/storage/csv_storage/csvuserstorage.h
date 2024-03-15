@@ -12,15 +12,14 @@ public:
 
 public:
     CsvUserStorage();
+    void inflateFileIfNeeded() const override;
 
+public:
     User getUserById(const int) override;
     User getUserByLogin(const QString&) override;
     User getUserByCredentials(const QString& user,
                               const QString& password) override;
     int insertUser(const User& user) override;
-
-private:
-    int nextUserId;
 };
 
 #endif // CSVUSERSTORAGE_H
